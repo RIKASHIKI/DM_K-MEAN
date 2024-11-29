@@ -20,7 +20,7 @@ def euclidean_distance(point1, point2):
     dist = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
     return dist
 
-# Fungsi K-Means dengan langkah-langkah terperinci
+# Fungsi K-Means dengan langkah-langkah perhitungan yang rinci
 def k_means_with_details(data, centroids, max_iter=100, tol=1e-4):
     print(f"____ Iterasi K-Means ____")
     print(f"Data siswa:\n{data}\n")
@@ -39,7 +39,7 @@ def k_means_with_details(data, centroids, max_iter=100, tol=1e-4):
                 dist = euclidean_distance(point, centroid)
                 distances.append(dist)
                 # Menampilkan perhitungan jarak Euclidean
-                print(f"  Jarak ke Centroid {idx+1}: d = sqrt(({point[0]} - {centroid[0]})^2 + ({point[1]} - {centroid[1]})^2) = {dist:.2f}")
+                print(f"  Jarak ke Centroid {idx+1}: d = √(({point[0]} - {centroid[0]})^2 + ({point[1]} - {centroid[1]})^2) = {dist:.2f}")
             cluster = np.argmin(distances)  # Cluster terdekat
             clusters.append(cluster)
             print(f"  Cluster yang ditentukan: {cluster + 1}\n")
@@ -52,10 +52,24 @@ def k_means_with_details(data, centroids, max_iter=100, tol=1e-4):
         for cluster_idx in range(len(centroids)):
             cluster_points = data[clusters == cluster_idx]
             if len(cluster_points) > 0:
-                new_centroid = cluster_points.mean(axis=0)
+                print(f"  Cluster {cluster_idx + 1}\n{cluster_points}")
+                x_values = cluster_points[:, 0]  # Ambil semua nilai x
+                y_values = cluster_points[:, 1]  # Ambil semua nilai y
+                
+                x_sum = np.sum(x_values)
+                y_sum = np.sum(y_values)
+                count = len(cluster_points)
+                
+                new_x = x_sum / count
+                new_y = y_sum / count
+                new_centroid = [new_x, new_y]
+                
                 new_centroids.append(new_centroid)
-                print(f"  Cluster {cluster_idx + 1} (Titik: {cluster_points}):")
-                print(f"  Centroid baru: {new_centroid}\n")
+                
+                # Menampilkan perhitungan centroid baru secara rinci
+                print(f"Rata-rata mtk: ({' + '.join(map(str, x_values))}) / {count} = {new_x:.2f}")
+                print(f"Rata-rata bhs: ({' + '.join(map(str, y_values))}) / {count} = {new_y:.2f}")
+                print(f"Centroid baru: {new_centroid}\n")
             else:
                 new_centroids.append(centroids[cluster_idx])  # Retain old centroid if no points
                 print(f"  Cluster {cluster_idx + 1} tidak memiliki titik. Centroid tetap: {centroids[cluster_idx]}")
